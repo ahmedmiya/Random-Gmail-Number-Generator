@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Random Gmail & Number Generator</title>
 
 <style>
@@ -13,14 +14,14 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #f4f6f8;
+    background: #f3f5f7;
     color: #222;
 }
 
 .container {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 20px;
+    max-width: 950px;
+    margin: 25px auto;
+    padding: 15px;
 }
 
 h1 {
@@ -30,34 +31,33 @@ h1 {
 
 .card {
     background: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 14px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 22px;
+    margin-bottom: 22px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
 }
 
 h2 {
     margin-top: 0;
 }
 
-.row {
+.grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 15px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
 }
 
-label {
-    font-weight: bold;
+.field label {
     display: block;
-    margin-bottom: 6px;
+    font-weight: bold;
+    margin-bottom: 7px;
 }
 
 select,
 input,
 button {
     width: 100%;
-    padding: 11px;
+    padding: 12px;
     border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 15px;
@@ -67,7 +67,7 @@ button {
     border: none;
     cursor: pointer;
     font-weight: bold;
-    margin-top: 8px;
+    margin-top: 14px;
 }
 
 .generate {
@@ -81,35 +81,47 @@ button {
 }
 
 .download {
-    background: #168f45;
+    background: #168a45;
     color: white;
+}
+
+.button-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
 }
 
 textarea {
     width: 100%;
-    min-height: 220px;
+    height: 260px;
     margin-top: 15px;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
     resize: vertical;
     font-family: monospace;
+    font-size: 14px;
 }
 
-.info {
+.note {
+    color: #777;
     font-size: 13px;
-    color: #666;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
-@media (max-width: 700px) {
-    .row {
+.count-info {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #555;
+}
+
+@media(max-width:700px) {
+    .grid {
         grid-template-columns: 1fr;
     }
 
-    .container {
-        margin: 10px auto;
-        padding: 12px;
+    .button-row {
+        grid-template-columns: 1fr;
     }
 }
 </style>
@@ -121,420 +133,935 @@ textarea {
 
 <h1>Random Gmail & Number Generator</h1>
 
-<!-- Gmail Generator -->
+
+<!-- =========================
+     GMAIL GENERATOR
+========================= -->
+
 <div class="card">
 
 <h2>📧 Gmail Generator</h2>
 
-<div class="row">
+<div class="grid">
 
-<div>
+<div class="field">
 <label>Country</label>
+
 <select id="gmailCountry">
-    <option value="BD">🇧🇩 Bangladesh</option>
-    <option value="US">🇺🇸 USA</option>
-    <option value="UK">🇬🇧 UK</option>
+
+<option value="BD">🇧🇩 Bangladesh</option>
+<option value="US">🇺🇸 USA</option>
+<option value="UK">🇬🇧 United Kingdom</option>
+<option value="CA">🇨🇦 Canada</option>
+<option value="AU">🇦🇺 Australia</option>
+<option value="DE">🇩🇪 Germany</option>
+<option value="FR">🇫🇷 France</option>
+<option value="IT">🇮🇹 Italy</option>
+
 </select>
 </div>
 
-<div>
-<label>How many?</label>
-<input type="number" id="gmailCount" min="1" max="10000" value="20">
+
+<div class="field">
+<label>How many Gmail?</label>
+
+<input
+type="number"
+id="gmailCount"
+value="20"
+min="1"
+max="10000">
 </div>
 
-<div>
-<label>Numbers</label>
+
+<div class="field">
+<label>Number Option</label>
+
 <select id="gmailDigits">
-    <option value="2">2 digits</option>
-    <option value="3">3 digits</option>
-    <option value="4">4 digits</option>
-    <option value="random">Random 2–4</option>
+
+<option value="random" selected>
+🎲 Random
+</option>
+
+<option value="1">
+1 digit
+</option>
+
+<option value="2">
+2 digits
+</option>
+
+<option value="3">
+3 digits
+</option>
+
+<option value="4">
+4 digits
+</option>
+
 </select>
 </div>
 
 </div>
 
-<button class="generate" onclick="generateGmails()">
+
+<button
+class="generate"
+onclick="generateGmails()">
+
 Generate Gmail
+
 </button>
 
-<textarea id="gmailOutput"
-placeholder="Generated Gmail addresses will appear here..."></textarea>
 
-<div class="row">
+<textarea
+id="gmailOutput"
+placeholder="One Gmail per line..."
+></textarea>
 
-<button class="copy" onclick="copyText('gmailOutput')">
+
+<div class="button-row">
+
+<button
+class="copy"
+onclick="copyText('gmailOutput')">
+
 Copy All
+
 </button>
 
-<button class="download" onclick="downloadTXT('gmailOutput','gmail-list.txt')">
-Download TXT
+<button
+class="download"
+onclick="downloadTXT(
+'gmailOutput',
+'gmail-list.txt'
+)">
+
+Download Gmail TXT
+
 </button>
+
+</div>
+
+<div class="note">
+
+Random option automatically chooses 1–4 digits.
+Examples: name5@gmail.com, name57@gmail.com,
+name588@gmail.com
 
 </div>
 
 </div>
 
 
-<!-- Number Generator -->
+
+<!-- =========================
+     PHONE GENERATOR
+========================= -->
+
 <div class="card">
 
 <h2>📱 Phone Number Generator</h2>
 
-<div class="row">
 
-<div>
+<div class="grid">
+
+<div class="field">
+
 <label>Country</label>
+
 <select id="phoneCountry">
-    <option value="BD">🇧🇩 Bangladesh</option>
-    <option value="US">🇺🇸 USA</option>
-    <option value="UK">🇬🇧 UK</option>
+
+<option value="BD">🇧🇩 Bangladesh</option>
+<option value="US">🇺🇸 USA</option>
+<option value="UK">🇬🇧 United Kingdom</option>
+<option value="CA">🇨🇦 Canada</option>
+<option value="AU">🇦🇺 Australia</option>
+<option value="DE">🇩🇪 Germany</option>
+<option value="FR">🇫🇷 France</option>
+<option value="IT">🇮🇹 Italy</option>
+
 </select>
+
 </div>
 
-<div>
-<label>How many?</label>
-<input type="number" id="phoneCount" min="1" max="10000" value="20">
+
+<div class="field">
+
+<label>How many Numbers?</label>
+
+<input
+type="number"
+id="phoneCount"
+value="20"
+min="1"
+max="10000">
+
 </div>
 
-<div>
-<label>Format</label>
+
+<div class="field">
+
+<label>Number Format</label>
+
 <select id="phoneFormat">
-    <option value="international">International</option>
-    <option value="local">Local</option>
+
+<option value="international">
+International
+</option>
+
+<option value="local">
+Local
+</option>
+
 </select>
-</div>
 
 </div>
 
-<button class="generate" onclick="generateNumbers()">
+</div>
+
+
+<button
+class="generate"
+onclick="generateNumbers()">
+
 Generate Numbers
+
 </button>
 
-<textarea id="phoneOutput"
-placeholder="Generated phone numbers will appear here..."></textarea>
 
-<div class="row">
+<textarea
+id="phoneOutput"
+placeholder="One number per line..."
+></textarea>
 
-<button class="copy" onclick="copyText('phoneOutput')">
+
+<div class="button-row">
+
+<button
+class="copy"
+onclick="copyText('phoneOutput')">
+
 Copy All
+
 </button>
 
-<button class="download" onclick="downloadTXT('phoneOutput','number-list.txt')">
-Download TXT
+<button
+class="download"
+onclick="downloadTXT(
+'phoneOutput',
+'number-list.txt'
+)">
+
+Download Number TXT
+
 </button>
 
 </div>
 
-<div class="info">
-Numbers are synthetic examples generated according to country-specific formatting.
-</div>
+
+<div class="note">
+
+Numbers are generated as synthetic examples using
+country-specific numbering patterns. They are not
+checked against live carrier databases.
 
 </div>
 
 </div>
+
+</div>
+
 
 
 <script>
 
-/* =========================
+/* ==========================================
    NAME DATABASE
-========================= */
+========================================== */
 
 const names = {
 
-    BD: [
-        "sonalikhan",
-        "rahimhasan",
-        "sumaiyahasan",
-        "tanvirahmed",
-        "nusratjahan",
-        "sadiaakter",
-        "mahirahman",
-        "farhanahmed",
-        "tanjimhasan",
-        "mimakter",
-        "shakilhasan",
-        "jannatara",
-        "sabbirahmed",
-        "lamiyaislam",
-        "arifhossain"
-    ],
+BD: [
+"sonalikhan",
+"rahimhasan",
+"sadiaakter",
+"tanvirahmed",
+"nusratjahan",
+"mahirahman",
+"farhanahmed",
+"tanjimhasan",
+"mimakter",
+"shakilhasan",
+"jannatara",
+"sabbirahmed",
+"lamiyaislam",
+"arifhossain",
+"sumaiyaislam",
+"rakibhasan",
+"mehjabinhossain",
+"farihaislam"
+],
 
-    US: [
-        "jameswilson",
-        "emilyjohnson",
-        "michaelbrown",
-        "oliviadavis",
-        "williamtaylor",
-        "sophiawilson",
-        "danielmiller",
-        "graceanderson",
-        "jackthompson",
-        "chloewilson",
-        "benjaminmoore",
-        "ameliajones",
-        "ethanmartin",
-        "harperlee",
-        "alexanderclark"
-    ],
+US: [
+"jameswilson",
+"emilyjohnson",
+"michaelbrown",
+"oliviadavis",
+"williamtaylor",
+"sophiawilson",
+"danielmiller",
+"graceanderson",
+"jackthompson",
+"chloewilson",
+"benjaminmoore",
+"ameliajones",
+"ethanmartin",
+"harperlee",
+"alexanderclark",
+"madisonhall",
+"noahwalker"
+],
 
-    UK: [
-        "oliversmith",
-        "emilyjones",
-        "georgewilliams",
-        "oliviawilson",
-        "jacktaylor",
-        "ameliamartin",
-        "harrythompson",
-        "isabellawhite",
-        "charliebrown",
-        "sophiemartin",
-        "jacobdavies",
-        "lilyevans",
-        "thomaswilson",
-        "miajohnson",
-        "oscarrobinson"
-    ]
+UK: [
+"oliversmith",
+"emilyjones",
+"georgewilliams",
+"oliviawilson",
+"jacktaylor",
+"ameliamartin",
+"harrythompson",
+"isabellawhite",
+"charliebrown",
+"sophiemartin",
+"jacobdavies",
+"lilyevans",
+"thomaswilson",
+"miajohnson",
+"oscarrobinson",
+"jacksonclarke"
+],
+
+CA: [
+"liamwilson",
+"emilybrown",
+"noahsmith",
+"oliviamartin",
+"ethanjohnson",
+"sophiawilson",
+"benjaminlee",
+"charlottemiller",
+"lucasanderson",
+"ameliajones",
+"danielclark",
+"avagray",
+"williamwalker",
+"ellasmith"
+],
+
+AU: [
+"jackwilson",
+"oliviajones",
+"noahsmith",
+"charlottebrown",
+"williamtaylor",
+"ameliadavis",
+"henrywilson",
+"islagarcia",
+"leoanderson",
+"matildajohnson",
+"thomaswhite",
+"evajackson",
+"lucasmartin"
+],
+
+DE: [
+"leonmueller",
+"emiliaschmidt",
+"paulschneider",
+"annamuller",
+"lukasfischer",
+"mariameyer",
+"felixweber",
+"leoniehofmann",
+"jonaswagner",
+"sofiaschulz",
+"maxbecker",
+"emmahartmann"
+],
+
+FR: [
+"lucasmartin",
+"emmaolivier",
+"gabrielbernard",
+"chloerobert",
+"thomasdurand",
+"leaferre",
+"nathandubois",
+"manonmoreau",
+"juleslaurent",
+"camilleblanc",
+"maximeleclerc",
+"alicegirard"
+],
+
+IT: [
+"lucarossi",
+"giuliabianchi",
+"marcoromano",
+"sofiaconti",
+"matteoricci",
+"auroraferrari",
+"lorenzogallo",
+"giovannimancini",
+"martinabrunetti",
+"andreacosta",
+"chiararinaldi",
+"alessandrogreco"
+]
 
 };
 
 
-/* =========================
-   RANDOM HELPERS
-========================= */
+/* ==========================================
+   RANDOM FUNCTIONS
+========================================== */
 
 function randomItem(array) {
-    return array[Math.floor(Math.random() * array.length)];
+
+    return array[
+        Math.floor(
+            Math.random() * array.length
+        )
+    ];
+
 }
 
 
-function randomDigits(count) {
+function randomDigits(length) {
 
     let result = "";
 
-    for (let i = 0; i < count; i++) {
-        result += Math.floor(Math.random() * 10);
+    for(let i = 0; i < length; i++) {
+
+        result +=
+            Math.floor(
+                Math.random() * 10
+            );
+
     }
 
     return result;
+
 }
 
 
-function getDigitCount() {
+/* ==========================================
+   GMAIL NUMBER LENGTH
+========================================== */
 
-    const setting = document.getElementById("gmailDigits").value;
+function getGmailDigitLength() {
 
-    if (setting === "random") {
-        return Math.floor(Math.random() * 3) + 2;
+    const option =
+        document.getElementById(
+            "gmailDigits"
+        ).value;
+
+
+    if(option === "random") {
+
+        /*
+          Random:
+          1 digit
+          2 digits
+          3 digits
+          4 digits
+        */
+
+        return Math.floor(
+            Math.random() * 4
+        ) + 1;
+
     }
 
-    return Number(setting);
+
+    return Number(option);
+
 }
 
 
-/* =========================
+/* ==========================================
    GMAIL GENERATOR
-========================= */
+========================================== */
 
 function generateGmails() {
 
     const country =
-        document.getElementById("gmailCountry").value;
+        document.getElementById(
+            "gmailCountry"
+        ).value;
+
 
     const count =
-        Number(document.getElementById("gmailCount").value);
+        Number(
+            document.getElementById(
+                "gmailCount"
+            ).value
+        );
 
-    if (!count || count < 1) {
-        alert("Enter a valid amount.");
+
+    if(!count || count < 1) {
+
+        alert(
+            "Please enter a valid Gmail count."
+        );
+
         return;
+
     }
 
-    const output = [];
+
+    const result = [];
+
     const used = new Set();
 
-    let attempts = 0;
 
-    while (output.length < count && attempts < count * 20) {
+    while(result.length < count) {
 
-        attempts++;
+        const name =
+            randomItem(
+                names[country]
+            );
 
-        const name = randomItem(names[country]);
 
-        const digits = randomDigits(getDigitCount());
+        const digitLength =
+            getGmailDigitLength();
 
-        const gmail = name + digits + "@gmail.com";
 
-        if (!used.has(gmail)) {
+        const digits =
+            randomDigits(
+                digitLength
+            );
+
+
+        const gmail =
+            name +
+            digits +
+            "@gmail.com";
+
+
+        if(!used.has(gmail)) {
 
             used.add(gmail);
 
-            output.push(gmail);
+            result.push(gmail);
+
         }
+
     }
 
-    document.getElementById("gmailOutput").value =
-        output.join("\n");
+
+    document.getElementById(
+        "gmailOutput"
+    ).value =
+        result.join("\n");
+
 }
 
 
-/* =========================
-   PHONE GENERATOR
-========================= */
+/* ==========================================
+   PHONE NUMBER GENERATOR
+========================================== */
 
 function generateNumbers() {
 
     const country =
-        document.getElementById("phoneCountry").value;
+        document.getElementById(
+            "phoneCountry"
+        ).value;
+
 
     const count =
-        Number(document.getElementById("phoneCount").value);
+        Number(
+            document.getElementById(
+                "phoneCount"
+            ).value
+        );
+
 
     const format =
-        document.getElementById("phoneFormat").value;
+        document.getElementById(
+            "phoneFormat"
+        ).value;
 
-    if (!count || count < 1) {
-        alert("Enter a valid amount.");
-        return;
-    }
 
-    const output = [];
+    if(!count || count < 1) {
 
-    for (let i = 0; i < count; i++) {
-
-        output.push(
-            createPhone(country, format)
+        alert(
+            "Please enter a valid number count."
         );
+
+        return;
+
     }
 
-    document.getElementById("phoneOutput").value =
-        output.join("\n");
+
+    const result = [];
+
+
+    for(let i = 0; i < count; i++) {
+
+        result.push(
+            createPhone(
+                country,
+                format
+            )
+        );
+
+    }
+
+
+    document.getElementById(
+        "phoneOutput"
+    ).value =
+        result.join("\n");
+
 }
 
 
+/* ==========================================
+   COUNTRY PHONE PATTERNS
+========================================== */
+
 function createPhone(country, format) {
 
-    /*
-       Synthetic number ranges are used here.
-       They are intended for testing/demo purposes.
+
+    /* Bangladesh
+       Mobile style:
+       +880 1XXXXXXXXX
     */
 
-    if (country === "BD") {
+    if(country === "BD") {
 
-        // Bangladesh mobile: +880 1XXXXXXXXX
-        const number = "1" + randomDigits(9);
+        const number =
+            "1" +
+            randomDigits(9);
 
-        if (format === "international") {
-            return "+880" + number;
+
+        if(format === "local") {
+
+            return "0" + number;
+
         }
 
-        return "0" + number;
+
+        return "+880" + number;
+
     }
 
 
-    if (country === "US") {
 
-        // NANP-style synthetic example
-        const area = "555";
+    /* USA
+       Synthetic 555 exchange
+    */
 
-        const exchange =
-            String(Math.floor(Math.random() * 800) + 200);
+    if(country === "US") {
+
+        const area =
+            String(
+                Math.floor(
+                    Math.random() * 800
+                ) + 200
+            );
+
+
+        const exchange = "555";
+
 
         const subscriber =
             randomDigits(4);
 
-        if (format === "international") {
-            return "+1" + area + exchange + subscriber;
+
+        if(format === "local") {
+
+            return "(" +
+                area +
+                ") " +
+                exchange +
+                "-" +
+                subscriber;
+
         }
 
-        return "(" + area + ") " +
-               exchange + "-" +
-               subscriber;
+
+        return "+1" +
+            area +
+            exchange +
+            subscriber;
+
     }
 
 
-    if (country === "UK") {
 
-        // UK mobile-style example
+    /* UK */
+
+    if(country === "UK") {
+
         const number =
-            "7" + randomDigits(9);
+            "7" +
+            randomDigits(9);
 
-        if (format === "international") {
-            return "+44" + number;
+
+        if(format === "local") {
+
+            return "0" + number;
+
         }
 
-        return "0" + number;
+
+        return "+44" + number;
+
+    }
+
+
+
+    /* Canada */
+
+    if(country === "CA") {
+
+        const area =
+            String(
+                Math.floor(
+                    Math.random() * 800
+                ) + 200
+            );
+
+
+        const exchange = "555";
+
+
+        const subscriber =
+            randomDigits(4);
+
+
+        if(format === "local") {
+
+            return "(" +
+                area +
+                ") " +
+                exchange +
+                "-" +
+                subscriber;
+
+        }
+
+
+        return "+1" +
+            area +
+            exchange +
+            subscriber;
+
+    }
+
+
+
+    /* Australia */
+
+    if(country === "AU") {
+
+        const number =
+            "4" +
+            randomDigits(8);
+
+
+        if(format === "local") {
+
+            return "04" + number.substring(1);
+
+        }
+
+
+        return "+61" + number;
+
+    }
+
+
+
+    /* Germany */
+
+    if(country === "DE") {
+
+        const number =
+            "15" +
+            randomDigits(9);
+
+
+        if(format === "local") {
+
+            return "0" + number;
+
+        }
+
+
+        return "+49" + number;
+
+    }
+
+
+
+    /* France */
+
+    if(country === "FR") {
+
+        const number =
+            "6" +
+            randomDigits(8);
+
+
+        if(format === "local") {
+
+            return "06" + number.substring(1);
+
+        }
+
+
+        return "+33" + number;
+
+    }
+
+
+
+    /* Italy */
+
+    if(country === "IT") {
+
+        const number =
+            "3" +
+            randomDigits(9);
+
+
+        if(format === "local") {
+
+            return "0" + number;
+
+        }
+
+
+        return "+39" + number;
+
     }
 
 }
 
 
-/* =========================
+/* ==========================================
    COPY
-========================= */
+========================================== */
 
-function copyText(elementId) {
+function copyText(id) {
 
     const textarea =
-        document.getElementById(elementId);
+        document.getElementById(id);
 
-    if (!textarea.value.trim()) {
+
+    if(!textarea.value.trim()) {
+
         alert("Nothing to copy.");
+
         return;
+
     }
 
-    navigator.clipboard.writeText(textarea.value)
+
+    navigator.clipboard
+        .writeText(
+            textarea.value
+        )
         .then(() => {
+
             alert("Copied!");
+
         })
         .catch(() => {
 
             textarea.select();
-            document.execCommand("copy");
+
+            document.execCommand(
+                "copy"
+            );
 
             alert("Copied!");
+
         });
+
 }
 
 
-/* =========================
-   DOWNLOAD TXT
-========================= */
+/* ==========================================
+   TXT DOWNLOAD
+========================================== */
 
-function downloadTXT(elementId, filename) {
+function downloadTXT(id, filename) {
 
     const text =
-        document.getElementById(elementId).value;
+        document.getElementById(id)
+        .value;
 
-    if (!text.trim()) {
-        alert("Nothing to download.");
+
+    if(!text.trim()) {
+
+        alert(
+            "Nothing to download."
+        );
+
         return;
+
     }
 
+
     const blob =
-        new Blob([text], {
-            type: "text/plain;charset=utf-8"
-        });
+        new Blob(
+            [text],
+            {
+                type:
+                "text/plain;charset=utf-8"
+            }
+        );
+
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
 
-    const a =
-        document.createElement("a");
 
-    a.href = url;
-    a.download = filename;
+    const link =
+        document.createElement(
+            "a"
+        );
 
-    document.body.appendChild(a);
 
-    a.click();
+    link.href = url;
 
-    document.body.removeChild(a);
+    link.download = filename;
 
-    URL.revokeObjectURL(url);
+    document.body.appendChild(
+        link
+    );
+
+    link.click();
+
+    document.body.removeChild(
+        link
+    );
+
+    URL.revokeObjectURL(
+        url
+    );
+
 }
 
 </script>
 
 </body>
-  </html>
+</html>
